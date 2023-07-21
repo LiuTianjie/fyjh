@@ -1,0 +1,33 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    container_name: mysql
+    cap_add:
+      - SYS_NICE
+    environment:
+      - MYSQL_ROOT_PASSWORD=LiuTao0.1
+      - MYSQL_DATABASE=fyjh
+      - TZ=Asia/Shanghai
+    ports:
+      - 33066:3306
+    volumes:
+      - ./mysql/mydir:/mydir
+      - .//mysql/datadir:/var/lib/mysql
+      - ./mysql/conf/my.conf:/etc/my.cnf
+      - ./mysql/source:/docker-entrypoint-initdb.d
+
+  backend:
+    build: ./backend
+    image: backend
+    container_name: backend
+    ports:
+      - 8888:8888
+
+  frontend:
+    build: ./frontend
+    image: frontend
+    container_name: frontend
+    ports:
+      - 3000:3000
